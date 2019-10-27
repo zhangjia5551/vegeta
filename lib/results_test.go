@@ -49,6 +49,8 @@ func TestResultDecoding(t *testing.T) {
 }
 
 func TestResultEncoding(t *testing.T) {
+	t.Parallel()
+
 	for _, tc := range []struct {
 		encoding string
 		enc      func(io.Writer) Encoder
@@ -63,8 +65,6 @@ func TestResultEncoding(t *testing.T) {
 	} {
 		tc := tc
 		t.Run(tc.encoding, func(t *testing.T) {
-			t.Parallel()
-
 			err := quick.Check(func(code uint16, ts uint32, latency time.Duration, seq, bsIn, bsOut uint64, body []byte, attack, e string) bool {
 				want := Result{
 					Attack:    attack,
@@ -101,7 +101,6 @@ func TestResultEncoding(t *testing.T) {
 
 				return true
 			}, nil)
-
 			if err != nil {
 				t.Fatal(err)
 			}
